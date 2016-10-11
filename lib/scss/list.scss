@@ -1,5 +1,5 @@
 .rw-list {
-  @include list-unstyled();
+  @include unstyled-list();
   font-size: $list-font-size;
   outline: 0;
   overflow:         auto;

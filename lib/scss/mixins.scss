@@ -17,14 +17,14 @@
   }
 }
 
-@mixin list-unstyled() {
+@mixin unstyled-list() {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 @mixin list-inline() {
-  @include list-unstyled();
+  @include unstyled-list();
   display: inline;
 }
 
