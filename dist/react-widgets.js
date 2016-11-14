@@ -196,15 +196,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _on = __webpack_require__(12);
+	var _on = __webpack_require__(14);
 
 	var _on2 = _interopRequireDefault(_on);
 
-	var _off = __webpack_require__(14);
+	var _off = __webpack_require__(15);
 
 	var _off2 = _interopRequireDefault(_off);
 
-	var _properties = __webpack_require__(15);
+	var _properties = __webpack_require__(11);
 
 	var _properties2 = _interopRequireDefault(_properties);
 
@@ -303,11 +303,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = hyphenate;
+
 	var rUpper = /([A-Z])/g;
 
-	module.exports = function hyphenate(string) {
+	function hyphenate(string) {
 	  return string.replace(rUpper, '-$1').toLowerCase();
-	};
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -319,28 +325,66 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var camelize = __webpack_require__(6),
-	    hyphenate = __webpack_require__(8),
-	    _getComputedStyle = __webpack_require__(9),
-	    removeStyle = __webpack_require__(11);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = style;
 
-	var has = Object.prototype.hasOwnProperty;
+	var _camelizeStyle = __webpack_require__(6);
 
-	module.exports = function style(node, property, value) {
-	  var css = '',
-	      props = property;
+	var _camelizeStyle2 = _interopRequireDefault(_camelizeStyle);
+
+	var _hyphenateStyle = __webpack_require__(8);
+
+	var _hyphenateStyle2 = _interopRequireDefault(_hyphenateStyle);
+
+	var _getComputedStyle2 = __webpack_require__(9);
+
+	var _getComputedStyle3 = _interopRequireDefault(_getComputedStyle2);
+
+	var _removeStyle = __webpack_require__(10);
+
+	var _removeStyle2 = _interopRequireDefault(_removeStyle);
+
+	var _properties = __webpack_require__(11);
+
+	var _isTransform = __webpack_require__(13);
+
+	var _isTransform2 = _interopRequireDefault(_isTransform);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function style(node, property, value) {
+	  var css = '';
+	  var transforms = '';
+	  var props = property;
 
 	  if (typeof property === 'string') {
-
-	    if (value === undefined) return node.style[camelize(property)] || _getComputedStyle(node).getPropertyValue(hyphenate(property));else (props = {})[property] = value;
+	    if (value === undefined) {
+	      return node.style[(0, _camelizeStyle2.default)(property)] || (0, _getComputedStyle3.default)(node).getPropertyValue((0, _hyphenateStyle2.default)(property));
+	    } else {
+	      (props = {})[property] = value;
+	    }
 	  }
 
-	  for (var key in props) if (has.call(props, key)) {
-	    !props[key] && props[key] !== 0 ? removeStyle(node, hyphenate(key)) : css += hyphenate(key) + ':' + props[key] + ';';
+	  Object.keys(props).forEach(function (key) {
+	    var value = props[key];
+	    if (!value && value !== 0) {
+	      (0, _removeStyle2.default)(node, (0, _hyphenateStyle2.default)(key));
+	    } else if ((0, _isTransform2.default)(key)) {
+	      transforms += key + '(' + value + ') ';
+	    } else {
+	      css += (0, _hyphenateStyle2.default)(key) + ': ' + value + ';';
+	    }
+	  });
+
+	  if (transforms) {
+	    css += _properties.transform + ': ' + transforms + ';';
 	  }
 
 	  node.style.cssText += ';' + css;
-	};
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -350,19 +394,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
 
-	/**
-	 * Copyright 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/camelizeStyleName.js
-	 */
-
 	'use strict';
-	var camelize = __webpack_require__(7);
-	var msPattern = /^-ms-/;
 
-	module.exports = function camelizeStyleName(string) {
-	  return camelize(string.replace(msPattern, 'ms-'));
-	};
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = camelizeStyleName;
+
+	var _camelize = __webpack_require__(7);
+
+	var _camelize2 = _interopRequireDefault(_camelize);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var msPattern = /^-ms-/; /**
+	                          * Copyright 2014-2015, Facebook, Inc.
+	                          * All rights reserved.
+	                          * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/camelizeStyleName.js
+	                          */
+	function camelizeStyleName(string) {
+	  return (0, _camelize2.default)(string.replace(msPattern, 'ms-'));
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -374,13 +427,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = camelize;
 	var rHyphen = /-(.)/g;
 
-	module.exports = function camelize(string) {
+	function camelize(string) {
 	  return string.replace(rHyphen, function (_, chr) {
 	    return chr.toUpperCase();
 	  });
-	};
+	}
+	module.exports = exports["default"];
 
 
 /***/ },
@@ -390,20 +448,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
 
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/hyphenateStyleName.js
-	 */
+	'use strict';
 
-	"use strict";
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = hyphenateStyleName;
 
-	var hyphenate = __webpack_require__(4);
-	var msPattern = /^ms-/;
+	var _hyphenate = __webpack_require__(4);
 
-	module.exports = function hyphenateStyleName(string) {
-	  return hyphenate(string).replace(msPattern, "-ms-");
-	};
+	var _hyphenate2 = _interopRequireDefault(_hyphenate);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var msPattern = /^ms-/; /**
+	                         * Copyright 2013-2014, Facebook, Inc.
+	                         * All rights reserved.
+	                         * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/hyphenateStyleName.js
+	                         */
+
+	function hyphenateStyleName(string) {
+	  return (0, _hyphenate2.default)(string).replace(msPattern, '-ms-');
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -415,24 +482,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var babelHelpers = __webpack_require__(10);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = _getComputedStyle;
 
-	var _utilCamelizeStyle = __webpack_require__(6);
+	var _camelizeStyle = __webpack_require__(6);
 
-	var _utilCamelizeStyle2 = babelHelpers.interopRequireDefault(_utilCamelizeStyle);
+	var _camelizeStyle2 = _interopRequireDefault(_camelizeStyle);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rposition = /^(top|right|bottom|left)$/;
 	var rnumnonpx = /^([+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|))(?!px)[a-z%]+$/i;
 
-	module.exports = function _getComputedStyle(node) {
+	function _getComputedStyle(node) {
 	  if (!node) throw new TypeError('No Element passed to `getComputedStyle()`');
 	  var doc = node.ownerDocument;
 
-	  return 'defaultView' in doc ? doc.defaultView.opener ? node.ownerDocument.defaultView.getComputedStyle(node, null) : window.getComputedStyle(node, null) : { //ie 8 "magic" from: https://github.com/jquery/jquery/blob/1.11-stable/src/css/curCSS.js#L72
+	  return 'defaultView' in doc ? doc.defaultView.opener ? node.ownerDocument.defaultView.getComputedStyle(node, null) : window.getComputedStyle(node, null) : {
+	    //ie 8 "magic" from: https://github.com/jquery/jquery/blob/1.11-stable/src/css/curCSS.js#L72
 	    getPropertyValue: function getPropertyValue(prop) {
 	      var style = node.style;
 
-	      prop = (0, _utilCamelizeStyle2['default'])(prop);
+	      prop = (0, _camelizeStyle2.default)(prop);
 
 	      if (prop == 'float') prop = 'styleFloat';
 
@@ -460,51 +533,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return current;
 	    }
 	  };
-	};
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
 /* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*** IMPORTS FROM imports-loader ***/
-	var define = false;
-
-	(function (root, factory) {
-	  if (typeof define === "function" && define.amd) {
-	    define(["exports"], factory);
-	  } else if (true) {
-	    factory(exports);
-	  } else {
-	    factory(root.babelHelpers = {});
-	  }
-	})(this, function (global) {
-	  var babelHelpers = global;
-
-	  babelHelpers.interopRequireDefault = function (obj) {
-	    return obj && obj.__esModule ? obj : {
-	      "default": obj
-	    };
-	  };
-
-	  babelHelpers._extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	      var source = arguments[i];
-
-	      for (var key in source) {
-	        if (Object.prototype.hasOwnProperty.call(source, key)) {
-	          target[key] = source[key];
-	        }
-	      }
-	    }
-
-	    return target;
-	  };
-	})
-
-
-/***/ },
-/* 11 */
 /***/ function(module, exports) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -512,34 +546,115 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	module.exports = function removeStyle(node, key) {
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = removeStyle;
+	function removeStyle(node, key) {
 	  return 'removeProperty' in node.style ? node.style.removeProperty(key) : node.style.removeAttribute(key);
-	};
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
 
 	'use strict';
-	var canUseDOM = __webpack_require__(13);
-	var on = function on() {};
 
-	if (canUseDOM) {
-	  on = (function () {
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.transitionEnd = exports.transitionDuration = exports.transitionDelay = exports.transitionTiming = exports.transitionProperty = exports.transform = undefined;
 
-	    if (document.addEventListener) return function (node, eventName, handler, capture) {
-	      return node.addEventListener(eventName, handler, capture || false);
-	    };else if (document.attachEvent) return function (node, eventName, handler) {
-	      return node.attachEvent('on' + eventName, handler);
-	    };
-	  })();
+	var _inDOM = __webpack_require__(12);
+
+	var _inDOM2 = _interopRequireDefault(_inDOM);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var transform = 'transform';
+	var prefix = void 0,
+	    transitionEnd = void 0;
+	var transitionTiming = void 0,
+	    transitionDuration = void 0;
+	var transitionProperty = void 0,
+	    transitionDelay = void 0;
+
+	if (_inDOM2.default) {
+	  var _getTransitionPropert = getTransitionProperties();
+
+	  prefix = _getTransitionPropert.prefix;
+	  exports.transitionEnd = transitionEnd = _getTransitionPropert.transitionEnd;
+
+
+	  exports.transform = transform = prefix + '-' + transform;
+	  exports.transitionProperty = transitionProperty = prefix + '-transition-property';
+	  exports.transitionDuration = transitionDuration = prefix + '-transition-duration';
+	  exports.transitionDelay = transitionDelay = prefix + '-transition-delay';
+	  exports.transitionTiming = transitionTiming = prefix + '-transition-timing-function';
 	}
 
-	module.exports = on;
+	exports.transform = transform;
+	exports.transitionProperty = transitionProperty;
+	exports.transitionTiming = transitionTiming;
+	exports.transitionDelay = transitionDelay;
+	exports.transitionDuration = transitionDuration;
+	exports.transitionEnd = transitionEnd;
+	exports.default = {
+	  transform: transform,
+	  end: transitionEnd,
+	  property: transitionProperty,
+	  timing: transitionTiming,
+	  delay: transitionDelay,
+	  duration: transitionDuration
+	};
+
+
+	function getTransitionProperties() {
+	  var transitionEnd = void 0;
+	  var prefix = '';
+	  var eventNames = {
+	    O: 'otransitionend',
+	    Moz: 'transitionend',
+	    Webkit: 'webkitTransitionEnd',
+	    ms: 'MSTransitionEnd'
+	  };
+
+	  var element = document.createElement('div');
+	  for (var vendor in eventNames) {
+	    if (eventNames.hasOwnProperty(vendor)) {
+	      if (element.style[vendor + 'TransitionProperty'] !== undefined) {
+	        prefix = '-' + vendor.toLowerCase();
+	        transitionEnd = eventNames[vendor];
+	        break;
+	      }
+	    }
+	  }if (!transitionEnd && element.style.transitionProperty !== undefined) transitionEnd = 'transitionend';
+
+	  element = null;
+
+	  return { transitionEnd: transitionEnd, prefix: prefix };
+	}
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -549,8 +664,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
 
-	'use strict';
-	module.exports = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isTransform;
+	var supportedTransforms = /^((translate|rotate|scale)(X|Y|Z|3d)?|matrix(3d)?|perspective|skew(X|Y)?)$/i;
+
+	function isTransform(property) {
+	  return !!(property && supportedTransforms.test(property));
+	}
+	module.exports = exports["default"];
 
 
 /***/ },
@@ -561,22 +686,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	var define = false;
 
 	'use strict';
-	var canUseDOM = __webpack_require__(13);
-	var off = function off() {};
 
-	if (canUseDOM) {
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	  off = (function () {
+	var _inDOM = __webpack_require__(12);
+
+	var _inDOM2 = _interopRequireDefault(_inDOM);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var on = function on() {};
+	if (_inDOM2.default) {
+	  on = function () {
 
 	    if (document.addEventListener) return function (node, eventName, handler, capture) {
-	      return node.removeEventListener(eventName, handler, capture || false);
+	      return node.addEventListener(eventName, handler, capture || false);
 	    };else if (document.attachEvent) return function (node, eventName, handler) {
-	      return node.detachEvent('on' + eventName, handler);
+	      return node.attachEvent('on' + eventName, handler);
 	    };
-	  })();
+	  }();
 	}
 
-	module.exports = off;
+	exports.default = on;
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -587,60 +721,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	var define = false;
 
 	'use strict';
-	var canUseDOM = __webpack_require__(13);
 
-	var has = Object.prototype.hasOwnProperty,
-	    transform = 'transform',
-	    transition = {},
-	    transitionTiming,
-	    transitionDuration,
-	    transitionProperty,
-	    transitionDelay;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	if (canUseDOM) {
-	  transition = getTransitionProperties();
+	var _inDOM = __webpack_require__(12);
 
-	  transform = transition.prefix + transform;
+	var _inDOM2 = _interopRequireDefault(_inDOM);
 
-	  transitionProperty = transition.prefix + 'transition-property';
-	  transitionDuration = transition.prefix + 'transition-duration';
-	  transitionDelay = transition.prefix + 'transition-delay';
-	  transitionTiming = transition.prefix + 'transition-timing-function';
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var off = function off() {};
+	if (_inDOM2.default) {
+	  off = function () {
+	    if (document.addEventListener) return function (node, eventName, handler, capture) {
+	      return node.removeEventListener(eventName, handler, capture || false);
+	    };else if (document.attachEvent) return function (node, eventName, handler) {
+	      return node.detachEvent('on' + eventName, handler);
+	    };
+	  }();
 	}
 
-	module.exports = {
-	  transform: transform,
-	  end: transition.end,
-	  property: transitionProperty,
-	  timing: transitionTiming,
-	  delay: transitionDelay,
-	  duration: transitionDuration
-	};
-
-	function getTransitionProperties() {
-	  var endEvent,
-	      prefix = '',
-	      transitions = {
-	    O: 'otransitionend',
-	    Moz: 'transitionend',
-	    Webkit: 'webkitTransitionEnd',
-	    ms: 'MSTransitionEnd'
-	  };
-
-	  var element = document.createElement('div');
-
-	  for (var vendor in transitions) if (has.call(transitions, vendor)) {
-	    if (element.style[vendor + 'TransitionProperty'] !== undefined) {
-	      prefix = '-' + vendor.toLowerCase() + '-';
-	      endEvent = transitions[vendor];
-	      break;
-	    }
-	  }
-
-	  if (!endEvent && element.style.transitionProperty !== undefined) endEvent = 'transitionend';
-
-	  return { end: endEvent, prefix: prefix };
-	}
+	exports.default = off;
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -900,7 +1004,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -910,7 +1014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
 	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 	} : function (obj) {
-	  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 	};
 
 	var idCount = 0;
@@ -1044,7 +1148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -1684,27 +1788,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var babelHelpers = __webpack_require__(10);
-
-	exports.__esModule = true;
-
-	/**
-	 * document.activeElement
-	 */
-	exports['default'] = activeElement;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = activeElement;
 
 	var _ownerDocument = __webpack_require__(22);
 
-	var _ownerDocument2 = babelHelpers.interopRequireDefault(_ownerDocument);
+	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function activeElement() {
-	  var doc = arguments[0] === undefined ? document : arguments[0];
+	  var doc = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : (0, _ownerDocument2.default)();
 
 	  try {
 	    return doc.activeElement;
-	  } catch (e) {}
+	  } catch (e) {/* ie throws if no active element */}
 	}
-
 	module.exports = exports['default'];
 
 
@@ -1717,13 +1818,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	exports.__esModule = true;
-	exports["default"] = ownerDocument;
-
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = ownerDocument;
 	function ownerDocument(node) {
 	  return node && node.ownerDocument || document;
 	}
-
 	module.exports = exports["default"];
 
 
@@ -1735,10 +1836,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	var define = false;
 
 	'use strict';
-	var canUseDOM = __webpack_require__(13);
 
-	var contains = (function () {
-	  var root = canUseDOM && document.documentElement;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _inDOM = __webpack_require__(12);
+
+	var _inDOM2 = _interopRequireDefault(_inDOM);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function () {
+	  var root = _inDOM2.default && document.documentElement;
 
 	  return root && root.contains ? function (context, node) {
 	    return context.contains(node);
@@ -1751,9 +1861,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return false;
 	  };
-	})();
+	}();
 
-	module.exports = contains;
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -1903,6 +2013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    propTypes = utils.uncontrolledPropTypes(controlledValues, basePropTypes, displayName);
 
 	    (0, _invariant2.default)(isCompositeComponent || !methods.length, '[uncontrollable] stateless function components cannot pass through methods ' + 'because they have no associated instances. Check component: ' + displayName + ', ' + 'attempting to pass through methods: ' + methods.join(', '));
+
 	    methods = utils.transform(methods, function (obj, method) {
 	      obj[method] = function () {
 	        var _refs$inner;
@@ -1947,6 +2058,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this2._values[key] = nextProps[utils.defaultKey(key)];
 	          }
 	        });
+	      },
+	      getControlledInstance: function getControlledInstance() {
+	        return this.refs.inner;
 	      },
 	      render: function render() {
 	        var _this3 = this;
@@ -2034,7 +2148,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 	exports.version = undefined;
-	exports.customPropType = customPropType;
 	exports.uncontrolledPropTypes = uncontrolledPropTypes;
 	exports.getType = getType;
 	exports.getValue = getValue;
@@ -2043,8 +2156,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.chain = chain;
 	exports.transform = transform;
 	exports.each = each;
-	exports.isReactComponent = isReactComponent;
 	exports.has = has;
+	exports.isReactComponent = isReactComponent;
 
 	var _react = __webpack_require__(19);
 
@@ -2056,16 +2169,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function customPropType(handler, propType, name) {
-
+	function readOnlyPropType(handler, name) {
 	  return function (props, propName) {
-
 	    if (props[propName] !== undefined) {
 	      if (!props[handler]) {
 	        return new Error('You have provided a `' + propName + '` prop to ' + '`' + name + '` without an `' + handler + '` handler. This will render a read-only field. ' + 'If the field should be mutable use `' + defaultKey(propName) + '`. Otherwise, set `' + handler + '`');
 	      }
-
-	      return propType && propType(props, propName, name);
 	    }
 	  };
 	}
@@ -2075,13 +2184,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if (false) {
 	    transform(controlledValues, function (obj, handler, prop) {
-	      var type = basePropTypes[prop];
-
 	      (0, _invariant2.default)(typeof handler === 'string' && handler.trim().length, 'Uncontrollable - [%s]: the prop `%s` needs a valid handler key name in order to make it uncontrollable', displayName, prop);
 
-	      obj[prop] = customPropType(handler, type, displayName);
-
-	      if (type !== undefined) obj[defaultKey(prop)] = type;
+	      obj[prop] = readOnlyPropType(handler, displayName);
 	    }, propTypes);
 	  }
 
@@ -2140,6 +2245,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
+	function has(o, k) {
+	  return o ? Object.prototype.hasOwnProperty.call(o, k) : false;
+	}
+
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
 	 * All rights reserved.
@@ -2152,10 +2261,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return !!(component && component.prototype && component.prototype.isReactComponent);
 	}
 
-	function has(o, k) {
-	  return o ? Object.prototype.hasOwnProperty.call(o, k) : false;
-	}
-
 
 /***/ },
 /* 28 */
@@ -2163,7 +2268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -2266,7 +2371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -2368,7 +2473,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -2466,7 +2571,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -2585,7 +2690,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -2638,11 +2743,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  DropdownListInput.prototype.render = function render() {
-	    var _props = this.props;
-	    var placeholder = _props.placeholder;
-	    var value = _props.value;
-	    var textField = _props.textField;
-	    var Component = _props.valueComponent;
+	    var _props = this.props,
+	        placeholder = _props.placeholder,
+	        value = _props.value,
+	        textField = _props.textField,
+	        Component = _props.valueComponent;
 
 	    return _react2.default.createElement('div', { className: 'rw-input rw-dropdown-list-input' }, !value && placeholder ? _react2.default.createElement('span', { className: 'rw-placeholder' }, placeholder) : Component ? _react2.default.createElement(Component, { item: value }) : (0, _dataHelpers.dataText)(value, textField));
 	  };
@@ -2752,7 +2857,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -2764,7 +2869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
 	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 	} : function (obj) {
-	  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 	};
 
 	exports.dataValue = dataValue;
@@ -2829,7 +2934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -3179,13 +3284,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var offset = __webpack_require__(37),
-	    getWindow = __webpack_require__(38);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = height;
 
-	module.exports = function height(node, client) {
-	  var win = getWindow(node);
-	  return win ? win.innerHeight : client ? node.clientHeight : offset(node).height;
-	};
+	var _offset = __webpack_require__(37);
+
+	var _offset2 = _interopRequireDefault(_offset);
+
+	var _isWindow = __webpack_require__(38);
+
+	var _isWindow2 = _interopRequireDefault(_isWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function height(node, client) {
+	  var win = (0, _isWindow2.default)(node);
+	  return win ? win.innerHeight : client ? node.clientHeight : (0, _offset2.default)(node).height;
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -3196,20 +3314,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	var define = false;
 
 	'use strict';
-	var contains = __webpack_require__(23),
-	    getWindow = __webpack_require__(38),
-	    ownerDocument = __webpack_require__(22);
 
-	module.exports = function offset(node) {
-	  var doc = ownerDocument(node),
-	      win = getWindow(doc),
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = offset;
+
+	var _contains = __webpack_require__(23);
+
+	var _contains2 = _interopRequireDefault(_contains);
+
+	var _isWindow = __webpack_require__(38);
+
+	var _isWindow2 = _interopRequireDefault(_isWindow);
+
+	var _ownerDocument = __webpack_require__(22);
+
+	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function offset(node) {
+	  var doc = (0, _ownerDocument2.default)(node),
+	      win = (0, _isWindow2.default)(doc),
 	      docElem = doc && doc.documentElement,
 	      box = { top: 0, left: 0, height: 0, width: 0 };
 
 	  if (!doc) return;
 
 	  // Make sure it's not a disconnected DOM node
-	  if (!contains(docElem, node)) return box;
+	  if (!(0, _contains2.default)(docElem, node)) return box;
 
 	  if (node.getBoundingClientRect !== undefined) box = node.getBoundingClientRect();
 
@@ -3224,7 +3358,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return box;
-	};
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -3234,11 +3369,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
 
-	'use strict';
+	"use strict";
 
-	module.exports = function getWindow(node) {
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = getWindow;
+	function getWindow(node) {
 	  return node === node.window ? node : node.nodeType === 9 ? node.defaultView || node.parentWindow : false;
-	};
+	}
+	module.exports = exports["default"];
 
 
 /***/ },
@@ -3554,7 +3694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -4502,8 +4642,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function createFocusManager(instance, _ref) {
 	  var _desc, _value, _obj;
 
-	  var willHandle = _ref.willHandle;
-	  var didHandle = _ref.didHandle;
+	  var willHandle = _ref.willHandle,
+	      didHandle = _ref.didHandle;
 
 	  var timeouts = (0, _timeoutManager2.default)(instance);
 	  var isMounted = (0, _mountManager2.default)(instance);
@@ -4678,56 +4818,81 @@ return /******/ (function(modules) { // webpackBootstrap
 	var define = false;
 
 	'use strict';
-	var getOffset = __webpack_require__(37),
-	    height = __webpack_require__(36),
-	    getScrollParent = __webpack_require__(56),
-	    scrollTop = __webpack_require__(57),
-	    raf = __webpack_require__(58),
-	    getWindow = __webpack_require__(38);
 
-	module.exports = function scrollTo(selected, scrollParent) {
-	    var offset = getOffset(selected),
-	        poff = { top: 0, left: 0 },
-	        list,
-	        listScrollTop,
-	        selectedTop,
-	        isWin,
-	        selectedHeight,
-	        listHeight,
-	        bottom;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = scrollTo;
 
-	    if (!selected) return;
+	var _offset = __webpack_require__(37);
 
-	    list = scrollParent || getScrollParent(selected);
-	    isWin = getWindow(list);
-	    listScrollTop = scrollTop(list);
+	var _offset2 = _interopRequireDefault(_offset);
 
-	    listHeight = height(list, true);
-	    isWin = getWindow(list);
+	var _height = __webpack_require__(36);
 
-	    if (!isWin) poff = getOffset(list);
+	var _height2 = _interopRequireDefault(_height);
 
-	    offset = {
-	        top: offset.top - poff.top,
-	        left: offset.left - poff.left,
-	        height: offset.height,
-	        width: offset.width
-	    };
+	var _scrollParent = __webpack_require__(56);
 
-	    selectedHeight = offset.height;
-	    selectedTop = offset.top + (isWin ? 0 : listScrollTop);
-	    bottom = selectedTop + selectedHeight;
+	var _scrollParent2 = _interopRequireDefault(_scrollParent);
 
-	    listScrollTop = listScrollTop > selectedTop ? selectedTop : bottom > listScrollTop + listHeight ? bottom - listHeight : listScrollTop;
+	var _scrollTop = __webpack_require__(57);
 
-	    var id = raf(function () {
-	        return scrollTop(list, listScrollTop);
-	    });
+	var _scrollTop2 = _interopRequireDefault(_scrollTop);
 
-	    return function () {
-	        return raf.cancel(id);
-	    };
-	};
+	var _requestAnimationFrame = __webpack_require__(58);
+
+	var _requestAnimationFrame2 = _interopRequireDefault(_requestAnimationFrame);
+
+	var _isWindow = __webpack_require__(38);
+
+	var _isWindow2 = _interopRequireDefault(_isWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function scrollTo(selected, scrollParent) {
+	  var offset = (0, _offset2.default)(selected);
+	  var poff = { top: 0, left: 0 };
+	  var list = void 0,
+	      listScrollTop = void 0,
+	      selectedTop = void 0,
+	      isWin = void 0;
+	  var selectedHeight = void 0,
+	      listHeight = void 0,
+	      bottom = void 0;
+
+	  if (!selected) return;
+
+	  list = scrollParent || (0, _scrollParent2.default)(selected);
+	  isWin = (0, _isWindow2.default)(list);
+	  listScrollTop = (0, _scrollTop2.default)(list);
+
+	  listHeight = (0, _height2.default)(list, true);
+	  isWin = (0, _isWindow2.default)(list);
+
+	  if (!isWin) poff = (0, _offset2.default)(list);
+
+	  offset = {
+	    top: offset.top - poff.top,
+	    left: offset.left - poff.left,
+	    height: offset.height,
+	    width: offset.width
+	  };
+
+	  selectedHeight = offset.height;
+	  selectedTop = offset.top + (isWin ? 0 : listScrollTop);
+	  bottom = selectedTop + selectedHeight;
+
+	  listScrollTop = listScrollTop > selectedTop ? selectedTop : bottom > listScrollTop + listHeight ? bottom - listHeight : listScrollTop;
+
+	  var id = (0, _requestAnimationFrame2.default)(function () {
+	    return (0, _scrollTop2.default)(list, listScrollTop);
+	  });
+	  return function () {
+	    return _requestAnimationFrame2.default.cancel(id);
+	  };
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -4739,11 +4904,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var css = __webpack_require__(5),
-	    height = __webpack_require__(36);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = scrollPrarent;
 
-	module.exports = function scrollPrarent(node) {
-	  var position = css(node, 'position'),
+	var _style = __webpack_require__(5);
+
+	var _style2 = _interopRequireDefault(_style);
+
+	var _height = __webpack_require__(36);
+
+	var _height2 = _interopRequireDefault(_height);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function scrollPrarent(node) {
+	  var position = (0, _style2.default)(node, 'position'),
 	      excludeStatic = position === 'absolute',
 	      ownerDoc = node.ownerDocument;
 
@@ -4751,16 +4928,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  while ((node = node.parentNode) && node.nodeType !== 9) {
 
-	    var isStatic = excludeStatic && css(node, 'position') === 'static',
-	        style = css(node, 'overflow') + css(node, 'overflow-y') + css(node, 'overflow-x');
+	    var isStatic = excludeStatic && (0, _style2.default)(node, 'position') === 'static',
+	        style = (0, _style2.default)(node, 'overflow') + (0, _style2.default)(node, 'overflow-y') + (0, _style2.default)(node, 'overflow-x');
 
 	    if (isStatic) continue;
 
-	    if (/(auto|scroll)/.test(style) && height(node) < node.scrollHeight) return node;
+	    if (/(auto|scroll)/.test(style) && (0, _height2.default)(node) < node.scrollHeight) return node;
 	  }
 
 	  return document;
-	};
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -4771,15 +4949,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	var define = false;
 
 	'use strict';
-	var getWindow = __webpack_require__(38);
 
-	module.exports = function scrollTop(node, val) {
-	  var win = getWindow(node);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = scrollTop;
+
+	var _isWindow = __webpack_require__(38);
+
+	var _isWindow2 = _interopRequireDefault(_isWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function scrollTop(node, val) {
+	  var win = (0, _isWindow2.default)(node);
 
 	  if (val === undefined) return win ? 'pageYOffset' in win ? win.pageYOffset : win.document.documentElement.scrollTop : node.scrollTop;
 
 	  if (win) win.scrollTo('pageXOffset' in win ? win.pageXOffset : win.document.documentElement.scrollLeft, val);else node.scrollTop = val;
-	};
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -4791,24 +4980,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var canUseDOM = __webpack_require__(13);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var vendors = ['', 'webkit', 'moz', 'o', 'ms'],
-	    cancel = 'clearTimeout',
-	    raf = fallback,
-	    compatRaf;
+	var _inDOM = __webpack_require__(12);
+
+	var _inDOM2 = _interopRequireDefault(_inDOM);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var vendors = ['', 'webkit', 'moz', 'o', 'ms'];
+	var cancel = 'clearTimeout';
+	var raf = fallback;
+	var compatRaf = void 0;
 
 	var getKey = function getKey(vendor, k) {
 	  return vendor + (!vendor ? k : k[0].toUpperCase() + k.substr(1)) + 'AnimationFrame';
 	};
 
-	if (canUseDOM) {
+	if (_inDOM2.default) {
 	  vendors.some(function (vendor) {
 	    var rafKey = getKey(vendor, 'request');
 
 	    if (rafKey in window) {
 	      cancel = getKey(vendor, 'cancel');
-	      return raf = function (cb) {
+	      return raf = function raf(cb) {
 	        return window[rafKey](cb);
 	      };
 	    }
@@ -4827,14 +5024,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return req;
 	}
 
-	compatRaf = function (cb) {
+	compatRaf = function compatRaf(cb) {
 	  return raf(cb);
 	};
 	compatRaf.cancel = function (id) {
 	  return window[cancel](id);
 	};
 
-	module.exports = compatRaf;
+	exports.default = compatRaf;
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -4971,7 +5169,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -5561,7 +5759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -5790,7 +5988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -5857,16 +6055,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  Input.prototype.render = function render() {
-	    var _props = this.props;
-	    var className = _props.className;
-	    var disabled = _props.disabled;
-	    var readOnly = _props.readOnly;
-	    var value = _props.value;
-	    var tabIndex = _props.tabIndex;
-	    var _props$component = _props.component;
-	    var Component = _props$component === undefined ? 'input' : _props$component;
-
-	    var props = _objectWithoutProperties(_props, ['className', 'disabled', 'readOnly', 'value', 'tabIndex', 'component']);
+	    var _props = this.props,
+	        className = _props.className,
+	        disabled = _props.disabled,
+	        readOnly = _props.readOnly,
+	        value = _props.value,
+	        tabIndex = _props.tabIndex,
+	        _props$component = _props.component,
+	        Component = _props$component === undefined ? 'input' : _props$component,
+	        props = _objectWithoutProperties(_props, ['className', 'disabled', 'readOnly', 'value', 'tabIndex', 'component']);
 
 	    return _react2.default.createElement(Component, _extends({}, props, {
 	      type: 'text',
@@ -5931,7 +6128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -5951,6 +6148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var _VIEW, _OPPOSITE_DIRECTION, _MULTIPLIER, _class, _desc, _value2, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _class3, _temp; //values, omit
+
 
 	var _react = __webpack_require__(19);
 
@@ -6595,7 +6793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -6757,7 +6955,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -6928,7 +7126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -7521,7 +7719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -7671,7 +7869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -7825,7 +8023,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -7982,7 +8180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -8174,7 +8372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -8429,13 +8627,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var offset = __webpack_require__(37),
-	    getWindow = __webpack_require__(38);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = width;
 
-	module.exports = function width(node, client) {
-	  var win = getWindow(node);
-	  return win ? win.innerWidth : client ? node.clientWidth : offset(node).width;
-	};
+	var _offset = __webpack_require__(37);
+
+	var _offset2 = _interopRequireDefault(_offset);
+
+	var _isWindow = __webpack_require__(38);
+
+	var _isWindow2 = _interopRequireDefault(_isWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function width(node, client) {
+	  var win = (0, _isWindow2.default)(node);
+	  return win ? win.innerWidth : client ? node.clientWidth : (0, _offset2.default)(node).width;
+	}
+	module.exports = exports['default'];
 
 
 /***/ },
@@ -8444,7 +8655,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -8464,6 +8675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }return target;
 	}; //pick, omit, has
+
 
 	var _react = __webpack_require__(19);
 
@@ -9132,7 +9344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -9322,7 +9534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -9602,7 +9814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -10049,7 +10261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -10238,6 +10450,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // this intermediate state is for when one runs into
 	  // the decimal or are typing the number
 
+
 	  NumberPickerInput.prototype.setStringValue = function setStringValue(stringValue) {
 	    this.setState({ stringValue: stringValue });
 	  };
@@ -10330,7 +10543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -11070,7 +11283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -11186,7 +11399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -11376,7 +11589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -11500,7 +11713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
@@ -11987,7 +12200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*** IMPORTS FROM imports-loader ***/
 	var define = false;
