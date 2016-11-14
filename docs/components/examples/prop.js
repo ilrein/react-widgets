@@ -1,29 +1,26 @@
-'use strict';
-module.exports = function(widgetName, prop, value){
+import { stripIndent } from 'common-tags';
+
+export default function(widgetName, prop, value) {
   var props = prop;
 
   if (arguments.length === 3)
     props = { [prop]: value }
 
-var code =
-`
-var ${widgetName} = ReactWidgets.${widgetName};
+  return stripIndent`
+    let { ${widgetName} } = ReactWidgets;
 
-ReactDOM.render(
-  <${widgetName} ${map(props)}/>, mountNode);`
+    let widget = (
+      <${widgetName} ${map(props, (k, v) => `
+        ${k}=${wrap(v)}`)}
+      />
+    )
 
-return code
+    ReactDOM.render(widget, mountNode);
+  `
 }
 
+let wrap = v => v[0] === "'" || v[0] === '"' ? `${v}` : `{${v}}`
 
-function map(o) {
-  var str = '';
-
-  for (var key in o) if ( o.hasOwnProperty(key) )
-    str += ` \n\t\t${key}={${o[key]}}`
-
-  if (Object.keys(o).length === 1)
-    return str.trim()
-
-  return str.substr(1)
+function map(o, fn) {
+  return Object.keys(o).map(key => fn(key, o[key])).join('')
 }

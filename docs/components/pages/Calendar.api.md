@@ -4,19 +4,19 @@
 </div>
 <--------------->
 
-### value?{ type: 'Date?', handler: "onChange", controllable: true }
+### value?{ type: '?Date', controllable: "onChange"}
 
-The current selected date, should be a Date object or null.
+${language.value}
 
 <EditableExample codeText={require('../examples/valuePicker')(widgetName, ['new Date()'])}/>
 
-### onChange?{ type: 'Function( Date? date )' }
+### onChange?{ type: 'function(date: ?date)', controllable: "value"  }
 
-Change event Handler that is called when the value is changed. The handler is called with the Date object
+${language.onChange}
 
 <EditableExample codeText={require('../examples/onChangePicker')(widgetName, ['new Date()'])}/>
 
-### onNavigate?{ type: 'Function( Date? date, direction string, view string )' }
+### onNavigate?{ type: 'function(date: ?Date, direction: string, view: string)' }
 
 Callback fired when the Calendar navigates between views, or forward and backwards in time.
 
@@ -28,46 +28,42 @@ The minimum date that the Calendar can navigate from.
 
 The maximum date that the Calendar can navigate to.
 
-### currentDate?{ type: 'Date', default: 'Date()', handler: 'onCurrentDateChange', controllable: true }
+### currentDate?{ type: 'Date', default: 'new Date()', controllable: 'onCurrentDateChange' }
 
 Default current date at which the calendar opens. If none is provided, opens at today's date or the `value` date (if any).
 
-### onCurrentDateChange?{ type: 'Function( Date? date )' }
+### onCurrentDateChange?{ type: 'function(date: ?Date)', controllable: "currentDate"  }
 
 Change event Handler that is called when the currentDate is changed. The handler is called with the currentDate object
 
-### footer?{ type: 'Boolean', default: 'false' }
+### footer?{ type: 'bool', default: 'false' }
 
 Show or hide the Calendar footer.
 
 <EditableExample codeText={require('../examples/prop')(widgetName, 'footer', 'true')}/>
 
-### dayComponent?{ type: 'Component' }
+### dayComponent?{ type: 'Component | function({ item: ?mixed }) -> ReactElement' }
 
 Provide a custom component to render the days of the month. The Component is provided the following props
 
 - `date`: a `Date` object for the day of the month to render
-- `label`: a formatted `String` of the date to render. To adjust the format of the `label` string use the `dateFormat` prop, listed below.
+- `label`: a formatted `string` of the date to render. To adjust the format of the `label` string use the `dateFormat` prop, listed below.
 
 <EditableExample codeText={require('../examples/dayComponent')(widgetName)}/>
 
-### initialView?{ type: 'Enum', default: '"month"' }
+### view?{ type: '"month"|"year"|"decade"|"century"', controllable: 'onViewChange' }
 
-The starting and lowest level view the calendar can navigate down to.
+Controls the currently displayed calendar view. Use `defaultView` to set
+a unique starting view.
 
-Acceptable values are:
-`"month"` `"year"` `"decade"` `"century"`
+<EditableExample codeText={require('../examples/view')(widgetName)}/>
 
-<EditableExample codeText={require('../examples/prop')(widgetName, 'initialView', '"year"')}/>
+### views?{ type: 'array<"month"|"year"|"decade"|"century">' }
 
-### finalView?{ type: 'Enum', default: '"century"' }
+Defines a list of views the Calendar can traverse through, starting with the
+first in the list to the last.
 
-The highest level view the calendar can navigate up to. This value should be higher
-than `initialView`
-
-Acceptable values are: `"month"` `"year"` `"decade"` `"century"`
-
-<EditableExample codeText={require('../examples/prop')(widgetName, 'finalView', '"year"')}/>
+<EditableExample codeText={require('../examples/views')(widgetName)}/>
 
 ### headerFormat?{ localizable: true }
 
@@ -116,27 +112,21 @@ A formatter for decade, the default formats the first and last year of the decad
 
 A formatter for century, the default formats the first and last year of the century like: 1900 - 1999.
 
+### isRtl?{ type: 'bool', default: "false" }
 
-### isRtl?{ type: 'Boolean', default: "false" }
+${language.isRtl}
 
-mark whether the widget should render right-to-left. This property can also be implicitly passed to the widget through
-a `childContext` prop (`isRtl`) this allows higher level application components to specify the direction.
+### messages?{ type: 'object' }
 
+${language.messages}
 
-### messages?{ type: 'Object' }
+### messages.moveBack?{ type: 'string', default: '"navigate back"' }
 
-Object hash containing display text and/or text for screen readers. Use the `messages` object to
-localize widget text and increase accessibility.
+title and screen reader text for the left arrow button.
 
+### messages.moveForward?{ type: 'string', default: '"navigate forward"' }
 
-### messages.moveBack?{ type: 'String', default: '"navigate back"' }
-
-title and screen reader text for the left arrow button
-
-
-### messages.moveForward?{ type: 'String', default: '"navigate forward"' }
-
-title and screen reader text for the right arrow button
+title and screen reader text for the right arrow button.
 
 
 ## Keyboard Navigation

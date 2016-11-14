@@ -1,13 +1,11 @@
 import { valueMatcher } from './dataHelpers';
 
-export function isDisabled(props){
-  return props.disabled === true
-    || props.disabled === 'disabled'
+export function isDisabled({ disabled }) {
+  return disabled === true || disabled === 'disabled'
 }
 
-export function isReadOnly(props){
-  return props.readOnly === true
-    || props.readOnly === 'readOnly'
+export function isReadOnly({ readOnly }){
+  return readOnly === true || readOnly === 'readOnly'
 }
 
 export function isDisabledItem(item, props){
@@ -40,18 +38,25 @@ export let widgetEnabled = interactionDecorator(true)
 export let widgetEditable = interactionDecorator(false)
 
 
-function interactionDecorator(disabledOnly){
-  function wrap(method){
-    return function decoratedMethod(...args){
-      if (!(isDisabled(this.props) || (!disabledOnly && isReadOnly(this.props))))
+function interactionDecorator(disabledOnly) {
+  function wrap(method) {
+    return function decoratedMethod(...args) {
+      if (
+        !(isDisabled(this.props) ||
+        (!disabledOnly && isReadOnly(this.props)))
+      ) {
         return method.apply(this, args)
+      }
     }
   }
 
   return function decorate(target, key, desc){
     if (desc.initializer) {
       let init = desc.initializer
-      desc.initializer = ()=> wrap(init())
+
+      desc.initializer = function () {
+        return wrap(init.call(this)).bind(this)
+      }
     }
     else desc.value = wrap(desc.value)
     return desc

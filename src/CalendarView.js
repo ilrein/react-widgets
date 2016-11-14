@@ -5,19 +5,24 @@ import dates from './util/dates';
 
 const VIEW_UNITS = ['month', 'year', 'decade', 'century'];
 
-function clamp(date, min, max){
+function clamp(date, min, max) {
   return dates.max(dates.min(date, max), min)
 }
 
 class CalendarView extends React.Component {
+  static propTypes = {
+    activeId: React.PropTypes.string,
+  };
+
   render() {
-    let { className } = this.props;
+    let { className, activeId, ...props } = this.props;
 
     return (
       <table
-        {...this.props}
+        {...props}
         role='grid'
         tabIndex='-1'
+        aria-activedescendant={activeId || null}
         className={cn(
           className,
           'rw-nav-view',
@@ -32,15 +37,18 @@ class CalendarView extends React.Component {
 class CalendarViewCell extends React.Component {
   static propTypes = {
     id: React.PropTypes.string,
+    activeId: React.PropTypes.string.isRequired,
     label: React.PropTypes.string,
-    today: React.PropTypes.instanceOf(Date),
+    now: React.PropTypes.instanceOf(Date),
+    date: React.PropTypes.instanceOf(Date),
     selected: React.PropTypes.instanceOf(Date),
     focused: React.PropTypes.instanceOf(Date),
     min: React.PropTypes.instanceOf(Date),
     max: React.PropTypes.instanceOf(Date),
     unit: React.PropTypes.oneOf(['day', ...VIEW_UNITS]),
     viewUnit: React.PropTypes.oneOf(VIEW_UNITS),
-    onChange: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired,
+    disabled: React.PropTypes.bool,
   };
 
   isEqual(date) {
@@ -53,20 +61,29 @@ class CalendarViewCell extends React.Component {
   }
 
   isNow() {
-    return this.isEqual(this.props.now)
+    return this.props.now && this.isEqual(this.props.now)
   }
 
   isFocused() {
-    return this.isEqual(this.props.focused)
+    return (
+      !this.props.disabled &&
+      !this.isEmpty() &&
+      this.isEqual(this.props.focused)
+    )
   }
 
   isSelected() {
-    return this.isEqual(this.props.selected)
+    return this.props.selected && this.isEqual(this.props.selected)
   }
 
   isOffView() {
     let { viewUnit, focused, date } = this.props;
-    return viewUnit && dates[viewUnit](date) !== dates[viewUnit](focused);
+    return (
+      date &&
+      focused &&
+      viewUnit &&
+      dates[viewUnit](date) !== dates[viewUnit](focused)
+    )
   }
 
   handleChange = () => {
@@ -75,39 +92,36 @@ class CalendarViewCell extends React.Component {
   }
 
   render()  {
-    let { children, id, label, disabled } = this.props;
+    let { children, activeId, label, disabled } = this.props;
+    let isDisabled = disabled || this.isEmpty()
 
-    if (this.isEmpty()) {
-      return <td className='rw-empty-cell' role='presentation'>&nbsp;</td>
-    }
 
     return (
       <td
         role='gridcell'
-        id={id}
+        id={this.isFocused() ? activeId : null}
         title={label}
         aria-label={label}
         aria-readonly={disabled}
         aria-selected={this.isSelected()}
+        onClick={!isDisabled ? this.handleChange : undefined}
+        className={cn(
+          'rw-cell',
+          this.isNow() && 'rw-now',
+          isDisabled && 'rw-state-disabled',
+          this.isEmpty() && 'rw-cell-not-allowed',
+          this.isOffView() && 'rw-cell-off-range',
+          this.isFocused() && 'rw-state-focus',
+          this.isSelected() && 'rw-state-selected'
+        )}
       >
-        <span
-          aria-labelledby={id}
-          onClick={this.handleChange}
-          className={cn(
-            'rw-btn',
-            this.isNow() && 'rw-now',
-            this.isOffView() && 'rw-off-range',
-            this.isFocused() && 'rw-state-focus',
-            this.isSelected() && 'rw-state-selected'
-          )}
-        >
-          {children}
-        </span>
+        {children}
       </td>
     )
   }
 }
 
+CalendarView.Body = props => <tbody className='rw-calendar-body' {...props} />;
 CalendarView.Row = props => <tr role='row' {...props} />;
 CalendarView.Cell = CalendarViewCell;
 

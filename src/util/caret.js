@@ -6,10 +6,10 @@ export default function caret(el, start, end ){
   set(el, start, end)
 }
 
-function get(el){
-  var start, end, rangeEl, clone;
+function get(el) {
+  let start, end, rangeEl, clone;
 
-  if( el.selectionStart !== undefined){
+  if (el.selectionStart !== undefined) {
     start = el.selectionStart
     end = el.selectionEnd
   }
@@ -31,17 +31,14 @@ function get(el){
   return { start, end }
 }
 
-function set(el, start, end){
-  var rangeEl;
-
+function set(el, start, end) {
+  let rangeEl;
 
   try {
-    if( el.selectionStart !== undefined){
-      el.focus()
+    if (el.selectionStart !== undefined) {
       el.setSelectionRange(start, end)
     }
     else {
-      el.focus();
       rangeEl = el.createTextRange();
       rangeEl.collapse(true);
       rangeEl.moveStart('character', start);
