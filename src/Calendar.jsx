@@ -74,19 +74,19 @@ let propTypes = {
   view: React.PropTypes.oneOf(VIEW_OPTIONS),
   initialView: React.PropTypes.oneOf(VIEW_OPTIONS),
 
-
-  finalView(propType) {
-    return function validate(props, propName, componentName, ...args) {
-      var err = React.PropTypes.oneOf(VIEW_OPTIONS)(props, propName, componentName, ...args)
-
-      if (err) return err
-      if (VIEW_OPTIONS.indexOf(props[propName]) < VIEW_OPTIONS.indexOf(props.initialView))
-        return new Error(`The \`${propName}\` prop: \`${props[propName]}\` cannot be 'lower' than the \`initialView\`
-          prop. This creates a range that cannot be rendered.`.replace(/\n\t/g, ''))
-
-      return propType(props, propName, componentName, ...args);
-    }
-  },
+  finalView: React.PropTypes.any,
+  // finalView(propType) {
+  //   return function validate(props, propName, componentName, ...args) {
+  //     var err = React.PropTypes.oneOf(VIEW_OPTIONS)(props, propName, componentName, ...args)
+  //
+  //     if (err) return err
+  //     if (VIEW_OPTIONS.indexOf(props[propName]) < VIEW_OPTIONS.indexOf(props.initialView))
+  //       return new Error(`The \`${propName}\` prop: \`${props[propName]}\` cannot be 'lower' than the \`initialView\`
+  //         prop. This creates a range that cannot be rendered.`.replace(/\n\t/g, ''))
+  //
+  //     return propType(props, propName, componentName, ...args);
+  //   }
+  // },
 
   onViewChange:  React.PropTypes.func,
   onNavigate:    React.PropTypes.func,
