@@ -57,7 +57,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jquense/react-widgets"
+    "url": "https://github.com/ilrein/react-widgets.git"
   },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0",
