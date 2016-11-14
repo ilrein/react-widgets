@@ -82,6 +82,9 @@ let propTypes = {
     if (VIEW_OPTIONS.indexOf(props[propName]) < VIEW_OPTIONS.indexOf(props.initialView))
       return new Error(`The \`${propName}\` prop: \`${props[propName]}\` cannot be 'lower' than the \`initialView\`
         prop. This creates a range that cannot be rendered.`.replace(/\n\t/g, ''))
+
+    let finalView;
+    return finalView(props, propName, componentName, ...args);
   },
 
   onViewChange:  React.PropTypes.func,
