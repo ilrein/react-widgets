@@ -30,16 +30,17 @@
 }
 
 .rw-popup {
-  @include box-shadow($popup-box-shadow);
   @include border-top-radius(0);
   @include border-bottom-radius($border-radius-sm);
 
+  box-shadow:       $popup-box-shadow;
   border:           $popup-border 1px solid;
   background:       $popup-bg;
 
   .rw-dropup & {
-    @include box-shadow($popup-box-shadow-up);
     @include border-bottom-radius(0);
     @include border-top-radius($border-radius-sm);
+
+    box-shadow: $popup-box-shadow-up;
   }
 }

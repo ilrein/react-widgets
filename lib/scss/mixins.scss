@@ -1,31 +1,30 @@
 
 @mixin border-box() {
-  -webkit-background-clip: border-box;
-     -moz-background-clip: border-box;
-          background-clip: border-box;
+  background-clip: border-box;
 
   &,
   & * {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
   }
 
   &:before,
   & *:before,
   &:after,
   & *:after, {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
   }
+}
+
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: ($opacity * 100);
+  filter: "alpha(opacity=#{$opacity-ie})";
 }
 
 @mixin unstyled-list() {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-@mixin list-inline() {
-  @include unstyled-list();
-  display: inline;
 }
 
 @mixin select-container($padding) {
@@ -41,18 +40,6 @@
   }
 }
 
-@mixin user-select() {
-  -webkit-touch-callout: none;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-}
-
-@mixin border-left-radius($radius) {
-  border-bottom-left-radius: $radius;
-     border-top-left-radius: $radius;
-}
 
 @mixin border-bottom-radius($radius) {
   border-bottom-right-radius: $radius;
@@ -62,27 +49,6 @@
 @mixin border-top-radius($radius) {
   border-top-right-radius: $radius;
    border-top-left-radius: $radius;
-}
-@mixin border-right-radius($radius) {
-  border-bottom-right-radius: $radius;
-     border-top-right-radius: $radius;
-}
-
-@mixin box-sizing($bm) {
-  -webkit-box-sizing: $bm;
-     -moz-box-sizing: $bm;
-          box-sizing: $bm;
-}
-
-@mixin box-shadow($shadow) {
-  -webkit-box-shadow: $shadow; // iOS <4.3 & Android <4.1
-          box-shadow: $shadow;
-}
-
-@mixin transition($transition) {
-  -webkit-transition: $transition;
-       -o-transition: $transition;
-          transition: $transition;
 }
 
 @mixin state-hover() {
@@ -110,10 +76,9 @@
 }
 
 @mixin state-disabled() {
-  @include box-shadow(none);
+  box-shadow: none;
   cursor: not-allowed;
 }
-
 
 
 @mixin disabled-color($color) {
@@ -149,7 +114,7 @@
   /** ie8 fallback **/
   margin-top: "-#{$minus}\9";
   height: "#{$total}\9";
-    /** --- **/
+  /** --- **/
 }
 
 @mixin make-btn-state() {
@@ -161,7 +126,7 @@
   }
 
   &:active {
-    @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+    box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
   }
 
   .rw-state-disabled &,
@@ -172,7 +137,7 @@
       cursor: not-allowed;
       background-color: inherit;
       background-image: none;
-      @include box-shadow(none);
+      box-shadow: none;
     }
   }
 }
