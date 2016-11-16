@@ -1,31 +1,68 @@
+@blue: #0072C6;
 
+// apply consistent colors on selected dates
+// .rw-state-selected {
+//   background-color: @blue;
+//   color: white;
+// }
+
+// remove default grey background
+// .rw-calendar .rw-header .rw-btn-view  {
+//   background-color: white;
+// }
 
 .rw-calendar-popup {
-  right: auto;
+  margin: 0 auto;
   min-width: 0;
-  width: 18em;
+  width: 103%;
+}
+
+// make sure the header txt is centered
+// now that we have 100% width
+th, .rw-cell {
+  text-align: center !important;
+}
+
+// add the sexy blue circular animation
+.rw-cell {
+  transition: all 0.5s ease-in-out;
+  align-self: center;
+  margin: 0 auto;
+  cursor: default;
+  line-height: 25px;
+  width: 25px;
+  height: 50px;
+
+  &:hover {
+    cursor: default;
+    margin: 0 auto;
+    background-color: @blue;
+    color: white;
+    border-radius: 50%;
+  }
 }
 
 .rw-calendar {
   border-radius: @border-radius;
   background-color: @calendar-bg;
-  border:           @widget-border 1px solid;
+  border: @widget-border 1px solid;
+  overflow: hidden;
 }
 
-.rw-now {
+.rw-calendar-now {
   font-weight: bold;
 }
 
-.rw-btn-left,
-.rw-btn-right {
+.rw-calendar-btn-left,
+.rw-calendar-btn-right {
   width: 12.5%;
 }
 
-.rw-btn-view {
+.rw-calendar-btn-view {
   width: 75%;
 }
 
-.rw-footer {
+.rw-calendar-footer {
   border-top: 1px solid @input-border;
 
   &:hover {
@@ -37,8 +74,10 @@
   outline: none;
   height: 200 / 14em;
   table-layout: fixed;
+  border-collapse: separate;
   border-spacing: 0;
   width: 100%;
+  background-color: @calendar-bg;
 
   th {
     text-align: right;
@@ -47,7 +86,6 @@
   }
 }
 
-
 .rw-cell {
   color: @btn-color;
   border-radius: @input-border-radius;
@@ -55,11 +93,11 @@
   line-height: normal;
   text-align: center;
   border: 1px solid transparent;
-  padding: @calendar-cell-padding;
+  // padding: @calendar-cell-padding;
 
-  &:hover {
-    background-color: @state-bg-hover;
-  }
+  // &:hover {
+  //   background-color: @state-bg-hover;
+  // }
 
   &.rw-state-disabled {
     .disabled-color(@btn-color);
