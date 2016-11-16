@@ -26,6 +26,8 @@ storiesOf('DateTimePicker', module)
     <Container>
       <DateTimePicker
         open="calendar"
+        defaultOpen
+        time={false}
       />
     </Container>
   )
