@@ -17,10 +17,18 @@ $blue: #0072C6 !default;
   width: 102%;
 }
 
-// make sure the header txt is centered
-// now that we have 100% width
-th, .rw-cell {
+.rw-calendar-month .rw-cell {
   text-align: center !important;
+}
+
+.rw-calendar-month {
+  thead {
+    tr {
+      th {
+        text-align: center;
+      }
+    }
+  }
 }
 
 // add the sexy blue circular animation
