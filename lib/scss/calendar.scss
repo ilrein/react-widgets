@@ -37,16 +37,24 @@ $blue: #0072C6 !default;
   align-self: center;
   margin: 0 auto;
   cursor: default;
-  line-height: 25px;
-  width: 25px;
-  height: 50px;
+  line-height: 2rem;
+  width: 2rem;
+  height: 4rem;
 
   &:hover {
-    cursor: default;
-    margin: 0 auto;
-    background-color: $blue;
-    color: white;
-    border-radius: 50%;
+    background-color: lighten(grey, 40%);
+  }
+
+  @media screen and (min-width: 767px) {
+    &:hover {
+      cursor: default;
+      margin: 0 auto;
+      background-color: $blue;
+      color: white;
+      border-radius: 75%;
+      width: 1rem;
+      height: 4rem;
+    }
   }
 }
 
